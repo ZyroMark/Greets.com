@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Greets">
+    <defs>
+        <linearGradient id="gMark" x1="8%" y1="4%" x2="94%" y2="98%">
+            <stop offset="0%" stop-color="#d4ff3f" />
+            <stop offset="52%" stop-color="#7ede35" />
+            <stop offset="100%" stop-color="#16a34a" />
+        </linearGradient>
+    </defs>
+
+    <!-- Tile -->
+    <rect width="512" height="512" rx="116" fill="url(#gMark)" />
+
+    <!-- G, drawn as an open ring with an inward bar. The gap reads as a
+         speech opening, which is the point of the whole product. -->
+    <path d="M346 174 A118 118 0 1 0 374 250 L280 250"
+          fill="none" stroke="#0f2419" stroke-width="54"
+          stroke-linecap="round" stroke-linejoin="round" />
+</svg>

@@ -172,8 +172,8 @@ strong { font-weight: 500; color: var(--text); }
 .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 74px; gap: 1rem; }
 .logo { display: flex; align-items: center; gap: .6rem; font-weight: 500; font-size: 1.2rem; letter-spacing: -.04em; }
 .logo-mark {
-    width: 30px; height: 30px; border-radius: 10px; background: var(--green);
-    display: grid; place-items: center; color: #fff; font-size: .9rem; font-weight: 600; letter-spacing: 0;
+    width: 32px; height: 32px; border-radius: 10px;
+    display: block; flex: none;
 }
 .nav-links { display: flex; align-items: center; gap: 2.1rem; }
 .nav-links a { color: var(--muted); font-size: .93rem; transition: color .2s; position: relative; }

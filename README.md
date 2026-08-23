@@ -32,6 +32,12 @@ Everyone accepts the terms and conditions and the privacy policy when they creat
 - `safety.html` lists what is banned, how to report someone and what happens afterwards.
 - `terms.html` and `privacy.html` are the two agreements users accept at sign up.
 
+## Logo and icons
+
+The mark is `static_site/logo.svg`, a rounded tile in the lime to green gradient holding an open G. The gap in the G reads as a speech opening. Everything else is generated from that one file: `favicon.ico` at 16, 32 and 48, `apple-touch-icon.png` at 180, `icon-192.png` and `icon-512.png` for the web manifest, and `og-image.jpg` for link previews.
+
+To swap in a different logo, replace `logo.svg` and regenerate the raster sizes from it. Nothing else references the artwork directly.
+
 ## Design
 
 White and light green surfaces with lime and vibrant green as the only accent colours. Type is Poppins, Light for body copy and Medium for headings. Icons are a stroke icon set drawn on a 24 grid and injected once as an SVG sprite, so there are no emoji anywhere in the interface.

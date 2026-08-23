@@ -45,7 +45,7 @@ function buildNav() {
     host.className = "nav";
     host.innerHTML =
         '<div class="container nav-inner">' +
-            '<a href="index.html" class="logo"><span class="logo-mark">G</span>Greets</a>' +
+            '<a href="index.html" class="logo"><img class="logo-mark" src="logo.svg" alt="" width="32" height="32">Greets</a>' +
             '<div class="nav-links" id="navLinks">' + linkHtml + "</div>" +
             '<div class="nav-actions">' + actions +
                 '<button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">' + ico("menu") + "</button>" +
@@ -79,7 +79,7 @@ function buildFooter() {
         '<div class="container">' +
             '<div class="footer-grid">' +
                 "<div>" +
-                    '<a href="index.html" class="logo"><span class="logo-mark">G</span>Greets</a>' +
+                    '<a href="index.html" class="logo"><img class="logo-mark" src="logo.svg" alt="" width="32" height="32">Greets</a>' +
                     '<p class="footer-note">Book real time with the people you follow. Every meet happens inside Greets, on video or voice, and never over a phone number.</p>' +
                 "</div>" +
                 "<div>" +
