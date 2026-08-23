@@ -1,144 +1,129 @@
-// Dashboard Data & Logic
+/* ============================================================
+   Browse page: search, category filters, card grid.
+   ============================================================ */
 
-// Mock Data (Fallback if API is down or User runs offline)
-const MOCK_USERS = [
-    {
-        id: 1,
-        name: 'Sarah Jessica',
-        username: 'sarah_j',
-        role: 'Greetie',
-        profile_pic: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
-    },
-    {
-        id: 2,
-        name: 'Mike Ross',
-        username: 'mike_law',
-        role: 'Greeter',
-        profile_pic: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
-    },
-    {
-        id: 3,
-        name: 'Emily Blunt',
-        username: 'emily_b',
-        role: 'Greetie',
-        profile_pic: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
-    },
-    {
-        id: 4,
-        name: 'David Beck',
-        username: 'd_beck',
-        role: 'Greeter',
-        profile_pic: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
-    },
-    {
-        id: 5,
-        name: 'Ariana V',
-        username: 'ari_grande_fan',
-        role: 'Greetie',
-        profile_pic: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
-    }
-];
+var activeCat = "All";
+var activeQuery = "";
 
-let currentFilter = 'Greetie';
-
-document.addEventListener('DOMContentLoaded', () => {
-    fetchUsers(currentFilter);
+document.addEventListener("DOMContentLoaded", function () {
+    greetUser();
+    showBookings();
+    buildFilters();
+    wireSearch();
+    render();
 });
 
-function setFilter(role) {
-    currentFilter = role;
+function greetUser() {
+    var user = Session.get();
+    if (!user) return;
 
-    // Update Tab UI
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active', 'greetie', 'greeter');
-    });
+    el("greeting").textContent = "Welcome back, " + (user.role === "greetie" ? user.name : "@" + user.username);
 
-    const activeBtn = document.getElementById(role === 'Greetie' ? 'tab-greetie' : 'tab-greeter');
-    activeBtn.classList.add('active');
-    if (role === 'Greetie') activeBtn.classList.add('greetie');
-    else activeBtn.classList.add('greeter');
-
-    // Refresh Grid
-    fetchUsers(role);
+    if (user.role === "greetie") {
+        var link = el("earnLink");
+        link.textContent = "You take bookings at $" + user.rate + " / 10 min";
+        link.classList.add("chip-lime");
+        link.removeAttribute("href");
+        link.style.cursor = "default";
+    }
 }
 
-async function fetchUsers(role) {
-    const grid = document.getElementById('user-grid');
-    grid.innerHTML = '<div class="glass-card" style="grid-column: 1/-1; text-align: center;">Loading...</div>';
+function showBookings() {
+    var list = Bookings.all();
+    var host = el("bookingStrip");
+    if (!list.length) return;
 
-    let users = [];
+    host.innerHTML =
+        '<div class="panel" style="margin-bottom:2rem;">' +
+            '<h3>Your upcoming meets</h3>' +
+            list.slice(0, 3).map(function (b) {
+                return (
+                    '<div class="row gap-4 wrap" style="justify-content:space-between;padding:.7rem 0;border-top:1px solid var(--border);">' +
+                        "<div>" +
+                            '<div style="font-weight:700;">' + esc(b.name) + "</div>" +
+                            '<div class="muted" style="font-size:.85rem;">' + esc(b.duration) + " on " + esc(b.call) + "</div>" +
+                        "</div>" +
+                        '<div class="row gap-3">' +
+                            '<span class="chip chip-lime">$' + b.price + "</span>" +
+                            '<span class="chip">Awaiting confirmation</span>' +
+                        "</div>" +
+                    "</div>"
+                );
+            }).join("") +
+        "</div>";
+}
 
-    // Tries to fetch from local API first, falls back to MOCK_USERS
-    try {
-        // We set a short timeout so the UI doesn't hang if the server is off
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 1000);
+function buildFilters() {
+    var host = el("filters");
+    host.innerHTML = CATEGORIES.map(function (c) {
+        return '<button class="filter' + (c === activeCat ? " active" : "") + '" data-cat="' + c + '">' + c + "</button>";
+    }).join("");
 
-        const res = await fetch(`http://localhost:5000/api/users?role=${role}`, {
-            signal: controller.signal
+    Array.prototype.forEach.call(host.querySelectorAll(".filter"), function (btn) {
+        btn.addEventListener("click", function () {
+            activeCat = btn.getAttribute("data-cat");
+            Array.prototype.forEach.call(host.querySelectorAll(".filter"), function (b) {
+                b.classList.toggle("active", b === btn);
+            });
+            render();
         });
-        clearTimeout(timeoutId);
-
-        if (res.ok) {
-            users = await res.json();
-            console.log('Loaded from API');
-        } else {
-            throw new Error('API Error');
-        }
-    } catch (err) {
-        console.warn('API unavailable or offline. Using Mock Data.', err);
-        // Filter mock data locally
-        users = MOCK_USERS.filter(u => u.role === role);
-    }
-
-    renderUsers(users);
-}
-
-function renderUsers(users) {
-    const grid = document.getElementById('user-grid');
-    grid.innerHTML = '';
-
-    if (users.length === 0) {
-        grid.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; color: #6b7280; padding: 3rem;">
-                <h3>No users found.</h3>
-                <p>Be the first to join as a ${currentFilter}!</p>
-            </div>
-        `;
-        return;
-    }
-
-    users.forEach((user, index) => {
-        const card = document.createElement('div');
-        card.className = 'user-card';
-        // Staggered animation
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        card.style.animation = `fadeUp 0.5s ease forwards ${index * 0.1}s`;
-
-        card.innerHTML = `
-            <div class="card-img">
-                <img src="${user.profile_pic}" alt="${user.username}" onerror="this.src='https://via.placeholder.com/300x200/1f2937/ffffff?text=User'">
-                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);"></div>
-            </div>
-            <div class="card-content">
-                <h3 style="font-size: 1.25rem; margin-bottom: 0.25rem;">${user.name}</h3>
-                <p class="text-gradient" style="font-size: 0.9rem; margin-bottom: 1rem;">@${user.username}</p>
-                
-                <button class="btn btn-primary card-btn">
-                    View Profile & Request
-                </button>
-            </div>
-        `;
-        grid.appendChild(card);
     });
 }
 
-// Add keyframe for JS-injected styles if needed, though CSS handles most.
-const styleSheet = document.createElement("style");
-styleSheet.innerText = `
-@keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
+function wireSearch() {
+    el("searchInput").addEventListener("input", function (e) {
+        activeQuery = e.target.value.trim().toLowerCase();
+        render();
+    });
+    el("clearAll").addEventListener("click", function () {
+        activeQuery = "";
+        activeCat = "All";
+        el("searchInput").value = "";
+        buildFilters();
+        render();
+    });
 }
-`;
-document.head.appendChild(styleSheet);
+
+function matches(g) {
+    if (activeCat !== "All" && g.category !== activeCat) return false;
+    if (!activeQuery) return true;
+    var hay = (g.name + " " + g.category + " " + g.country + " " + g.talks.join(" ")).toLowerCase();
+    return hay.indexOf(activeQuery) !== -1;
+}
+
+function render() {
+    var list = GREETIES.filter(matches);
+    var grid = el("grid");
+
+    el("empty").style.display = list.length ? "none" : "block";
+    grid.style.display = list.length ? "grid" : "none";
+
+    grid.innerHTML = list.map(function (g, i) {
+        return (
+            '<article class="g-card rise" data-id="' + g.id + '" style="animation-delay:' + (i * 0.04).toFixed(2) + 's">' +
+                '<div class="g-media">' +
+                    '<img src="' + g.photo + '" alt="' + esc(g.name) + '" loading="lazy" onerror="this.src=FALLBACK_IMG">' +
+                    '<div class="g-shade"></div>' +
+                    '<div class="g-badges">' +
+                        (g.live ? '<span class="g-badge live"><span class="dot-live"></span>Available now</span>' : "") +
+                        '<span class="g-badge">' + callLabel(g.call) + "</span>" +
+                    "</div>" +
+                    '<div class="g-meta">' +
+                        '<div class="g-name">' + esc(g.name) + ' <span class="verified">&check;</span></div>' +
+                        '<div class="g-cat">' + esc(g.category) + " in " + esc(g.country) + "</div>" +
+                    "</div>" +
+                "</div>" +
+                '<div class="g-foot">' +
+                    '<div class="g-price">$' + priceFor(g, 10) + ' <span>/ 10 min</span></div>' +
+                    '<div class="g-rate">&#9733; ' + g.rating.toFixed(1) + " (" + g.meets + ")</div>" +
+                "</div>" +
+            "</article>"
+        );
+    }).join("");
+
+    Array.prototype.forEach.call(grid.querySelectorAll(".g-card"), function (card) {
+        card.addEventListener("click", function () {
+            location.href = "profile.html?id=" + card.getAttribute("data-id");
+        });
+    });
+}

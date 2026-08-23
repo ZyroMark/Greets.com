@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in or join Greets.com</title>
+    <meta name="description" content="Sign in to Greets, or create an account as a Greeter to book meets or a Greetie to get paid for your time.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <nav id="nav"></nav>
+
+    <div class="auth-wrap">
+        <!-- LEFT: pitch -->
+        <aside class="auth-aside">
+            <div class="hero-glow" style="top:-260px;left:-200px;"></div>
+            <span class="eyebrow">Greets accounts</span>
+            <h2 id="asideTitle">Book time with the people you follow</h2>
+            <p id="asideCopy">
+                One account lets you book meets as a fan, or take bookings and get paid for your time.
+                You can do both from the same login.
+            </p>
+            <ul class="auth-points">
+                <li><span class="tick">&check;</span><span>Fans sign up with a username. Your real name is never shown.</span></li>
+                <li><span class="tick">&check;</span><span>Greeties use their real name and get verified before taking money.</span></li>
+                <li><span class="tick">&check;</span><span>Every call happens inside Greets, on video or voice.</span></li>
+                <li><span class="tick">&check;</span><span>No phone numbers are shared with anyone at any point.</span></li>
+                <li><span class="tick">&check;</span><span>Nothing sexual is allowed. Report anyone in one tap.</span></li>
+            </ul>
+        </aside>
+
+        <!-- RIGHT: forms -->
+        <main class="auth-panel">
+            <div class="auth-form">
+                <div class="tabs">
+                    <button class="tab active" id="tabSignin" type="button">Sign in</button>
+                    <button class="tab" id="tabJoin" type="button">Create account</button>
+                </div>
+
+                <!-- ---------- SIGN IN ---------- -->
+                <form id="formSignin" novalidate>
+                    <h2 style="font-size:1.6rem;margin-bottom:.4rem;">Welcome back</h2>
+                    <p class="muted" style="font-size:.93rem;margin-bottom:1.8rem;">Sign in to book a meet or check your bookings.</p>
+
+                    <div class="field">
+                        <label class="label" for="siEmail">Email</label>
+                        <input class="input" type="email" id="siEmail" placeholder="you@example.com" autocomplete="email">
+                    </div>
+                    <div class="field">
+                        <label class="label" for="siPass">Password</label>
+                        <input class="input" type="password" id="siPass" placeholder="Your password" autocomplete="current-password">
+                    </div>
+
+                    <div class="error" id="siError"></div>
+                    <button class="btn btn-primary full btn-lg" type="submit">Sign in</button>
+
+                    <p class="muted center mt-6" style="font-size:.9rem;">
+                        No account yet? <a href="#join" id="goJoin" style="color:var(--lime);font-weight:600;">Create one</a>
+                    </p>
+                </form>
+
+                <!-- ---------- JOIN ---------- -->
+                <form id="formJoin" style="display:none;" novalidate>
+                    <h2 style="font-size:1.6rem;margin-bottom:.4rem;">Create your account</h2>
+                    <p class="muted" style="font-size:.93rem;margin-bottom:1.5rem;">First, tell us which side you are on. You can add the other side later.</p>
+
+                    <div class="field">
+                        <div class="seg seg-2" id="roleSeg">
+                            <label class="opt sel" data-role="greeter">
+                                <input type="radio" name="role" value="greeter" checked>
+                                <span class="opt-title">I want to meet people</span>
+                                <span class="opt-desc">Book meets as a fan. Username only.</span>
+                            </label>
+                            <label class="opt" data-role="greetie">
+                                <input type="radio" name="role" value="greetie">
+                                <span class="opt-title">I want to get paid</span>
+                                <span class="opt-desc">Take bookings. Real name required.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Greeter only -->
+                    <div id="greeterFields">
+                        <div class="field">
+                            <label class="label" for="jUsername">Username</label>
+                            <input class="input" id="jUsername" placeholder="e.g. courtside_kev" autocomplete="username">
+                            <p class="hint">This is all anyone sees. Do not use your real name here.</p>
+                        </div>
+                    </div>
+
+                    <!-- Greetie only -->
+                    <div id="greetieFields" style="display:none;">
+                        <div class="field">
+                            <label class="label" for="jRealName">Full legal name</label>
+                            <input class="input" id="jRealName" placeholder="e.g. Sarah Jenkins" autocomplete="name">
+                            <p class="hint">Greeties are paid, so this has to be your real name and it is shown on your profile.</p>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="jCategory">What do you do</label>
+                            <select class="input" id="jCategory">
+                                <option>Musician</option>
+                                <option>Founder</option>
+                                <option>Designer</option>
+                                <option>Athlete</option>
+                                <option>Chef</option>
+                                <option>Creator</option>
+                                <option>Actor</option>
+                                <option>Producer</option>
+                                <option>Writer</option>
+                                <option>Gaming</option>
+                                <option>Photographer</option>
+                                <option>Something else</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label class="label">How do you want to meet people</label>
+                            <div class="seg" id="callSeg">
+                                <label class="opt sel" data-call="both">
+                                    <input type="radio" name="call" value="both" checked>
+                                    <span class="opt-title">Video or voice</span>
+                                    <span class="opt-desc">Let the Greeter pick when they book.</span>
+                                </label>
+                                <label class="opt" data-call="video">
+                                    <input type="radio" name="call" value="video">
+                                    <span class="opt-title">Video calls only</span>
+                                    <span class="opt-desc">Face to face inside the app.</span>
+                                </label>
+                                <label class="opt" data-call="voice">
+                                    <input type="radio" name="call" value="voice">
+                                    <span class="opt-title">Voice calls only</span>
+                                    <span class="opt-desc">Audio only, camera never turns on.</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="jRate">Your rate per 10 minutes</label>
+                            <input class="input" type="number" id="jRate" min="5" max="1000" value="30" placeholder="30">
+                            <p class="hint" id="rateHint">A 1 hour meet would cost a Greeter about $162.</p>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label" for="jEmail">Email</label>
+                        <input class="input" type="email" id="jEmail" placeholder="you@example.com" autocomplete="email">
+                    </div>
+                    <div class="field">
+                        <label class="label" for="jPass">Password</label>
+                        <input class="input" type="password" id="jPass" placeholder="At least 8 characters" autocomplete="new-password">
+                    </div>
+
+                    <div class="notice mt-4" id="idNotice" style="display:none;">
+                        <span>&#10003;</span>
+                        <span>Before your first payout we check your identity against the name above. You can set up your profile straight away.</span>
+                    </div>
+
+                    <div class="field mt-6">
+                        <label class="check">
+                            <input type="checkbox" id="jTerms">
+                            <span>I agree to the <a href="terms.html" target="_blank">terms and conditions</a> and the <a href="privacy.html" target="_blank">privacy policy</a>.</span>
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label class="check">
+                            <input type="checkbox" id="jRules">
+                            <span>I understand Greets is not a dating service, and that sexual requests, sexual content and abuse get an account removed.</span>
+                        </label>
+                    </div>
+
+                    <div class="error" id="jError"></div>
+                    <button class="btn btn-primary full btn-lg" type="submit">Create account</button>
+
+                    <p class="muted center mt-6" style="font-size:.9rem;">
+                        Already have an account? <a href="#" id="goSignin" style="color:var(--lime);font-weight:600;">Sign in</a>
+                    </p>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+
+</html>

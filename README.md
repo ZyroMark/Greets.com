@@ -1,44 +1,77 @@
 # Greets.com
 
-Greets.com is a front end prototype for a platform that connects two kinds of people: Greeters, who host and show visitors around, and Greeties, who are looking to meet someone. The prototype is a static site built with plain HTML, CSS and JavaScript. It runs in any browser with no build step and no install.
+Greets.com is a platform where fans pay to meet the people they follow. A fan books a set amount of someone's time, pays for it, and the two of them talk on a video or voice call that happens inside the platform. Anyone can sign up on the other side and get paid for their time, whether they are a public figure or not.
 
-## What is in here
+This repository holds the front end. It is a static site built with plain HTML, CSS and JavaScript, with no build step and no dependencies.
 
-The whole site lives in `static_site/`:
+## The two sides
 
-- `index.html` is the landing experience. It renders an interactive map of Greeters as floating nodes, draws connection lines between nearby nodes on a canvas layer, and pairs it with a sidebar that handles sign in, registration, profile viewing and profile editing.
-- `dashboard.html` is the browse view. It shows a card grid of profiles with tabs for switching between Greeties and Greeters.
-- `css/style.css` holds the full design system. Dark background, purple and pink gradients, glassmorphism cards, blurred background blobs, and a small set of utility classes for layout.
-- `js/main.js` drives the map, the canvas connection lines, and the sidebar state machine.
-- `js/dashboard.js` loads profiles and renders the card grid.
+**Greeties** are the people being met and paid. They set their own rate, choose whether they take video calls, voice calls or both, and accept only the bookings they want. Because money reaches them, they sign up under their real legal name and it is shown on their profile.
+
+**Greeters** are the fans doing the booking. They sign up under a username, so their real name is never shown on a profile, in search, or to the Greetie they book.
+
+## How a meet works
+
+Meets come in four lengths: 10 minutes, 30 minutes, 1 hour and 2 hours. The price follows the length, so the fan decides how much they want to spend. Longer meets carry a small discount, so a two hour booking is cheaper per minute than a ten minute one.
+
+Every call opens inside Greets. No phone numbers, addresses or outside apps are exchanged by either side at any point.
+
+## Ground rules
+
+Greets is not a dating service and there is nothing sexual on it. Sexual requests, sexual content, nudity, harassment, threats and sexual abuse are banned for everyone on both sides of a booking. Every profile and every page footer carries a report control. Reports are confidential, the reported person is never told who filed one, and confirmed cases end the account.
+
+Everyone accepts the terms and conditions and the privacy policy when they create an account, and separately confirms they have read the conduct rules.
+
+## Pages
+
+- `index.html` is the home page. It explains both sides, walks through the four steps of a booking, shows featured Greeties, and carries an interactive map of who is available.
+- `about.html` covers what Greets is, who it is for, how pricing works, why one side is anonymous and the other is not, and a plain statement that this is not a dating site.
+- `auth.html` is the combined sign in and sign up page. Signing up asks which side you are on and shows different fields for each.
+- `dashboard.html` is the browse view, with search, category filters and the card grid.
+- `profile.html` is a single Greetie with the booking panel, where you choose a length and a call type and see the price update.
+- `safety.html` lists what is banned, how to report someone and what happens afterwards.
+- `terms.html` and `privacy.html` are the two agreements users accept at sign up.
+
+## Code layout
+
+Everything lives in `static_site/`:
+
+- `css/style.css` holds the whole design system. Dark surfaces, a lime accent, rounded cards and pill shaped controls, with breakpoints at 1000px, 780px and 520px.
+- `js/data.js` holds the Greetie profiles, the meet lengths, the pricing function and the demo session helpers. Every page loads it first.
+- `js/app.js` builds the navigation and footer on every page and provides the report dialog.
+- `js/home.js`, `js/auth.js`, `js/dashboard.js` and `js/profile.js` are the per page scripts.
 
 ## Running it locally
 
-There is no build step. Open `static_site/index.html` directly in a browser, or serve the folder if you prefer a real HTTP origin:
+There is no build step. Serve the folder over HTTP so the pages can load each other:
 
 ```bash
-cd static_site
-python -m http.server 8000
+npx serve static_site
 ```
 
-Then visit `http://localhost:8000`.
+Opening `static_site/index.html` straight from the file system also works, though a real HTTP origin behaves closer to production.
 
-## Data
+## Current state
 
-Profiles are hardcoded in the JavaScript files. The dashboard first tries to fetch from `http://localhost:5000/api/users` with a one second timeout, and quietly falls back to the built in sample profiles when nothing answers. That means the site works fully offline, and it will pick up a real backend later without any change to the markup.
+This is a working front end with no backend behind it yet. Profiles are defined in `js/data.js`. Sign in accepts any valid looking email and password, and the session is kept in browser storage so the routes and the booking flow run end to end. Bookings are recorded in the same place and shown back on the dashboard.
 
-Sign in, registration, meetup requests and messaging are stubs. They confirm the action and update the view, but nothing is sent anywhere and nothing is stored between page loads.
+No payment is taken, no call is placed, no report is delivered and no identity is verified. Those parts need a server.
+
+## What comes next
+
+- A backend for accounts, profiles and sessions, replacing the browser storage stand in.
+- Real payment handling, including holding funds until a meet happens and refunding a no show.
+- Identity verification for Greeties before their first payout.
+- The video and voice calling layer.
+- Delivering reports to a safety team and the tooling for them to act on one.
+- Availability and scheduling, so a booking lands on a real calendar slot.
 
 ## Deployment
 
-The site is deployed on Vercel as a static build. `vercel.json` points the output directory at `static_site`, so there is nothing to compile and every push to `main` publishes.
+The site is deployed on Vercel as a static build. `vercel.json` points the output directory at `static_site`, so nothing is compiled and every push to `main` publishes.
 
 To deploy from your own machine:
 
 ```bash
 vercel --prod
 ```
-
-## Status
-
-This is a design and interaction prototype, not a finished product. The next steps are a real backend for accounts and profiles, persistent storage, actual messaging, and moving the map from random node placement to real geography.

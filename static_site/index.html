@@ -4,49 +4,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greets.com - Interactive World</title>
-    <!-- Google Fonts -->
+    <title>Greets.com - Pay to meet the people you follow</title>
+    <meta name="description" content="Greets lets fans book paid video or voice meets with creators, musicians, athletes, founders and public figures. Anyone can sign up to be met and get paid for their time.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Custom CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+    <nav id="nav"></nav>
 
-    <!-- Background Elements -->
-    <div class="blob blob-purple"></div>
-    <div class="blob blob-pink"></div>
+    <!-- ============ HERO ============ -->
+    <header class="hero">
+        <div class="hero-glow"></div>
+        <div class="container hero-grid">
+            <div class="rise">
+                <span class="eyebrow"><span class="dot-live"></span> Real people, real time</span>
+                <h1>Pay to meet the people you <span class="mark">actually follow</span>.</h1>
+                <p class="hero-sub">
+                    Greets connects fans with creators, musicians, athletes, founders and public figures for
+                    booked one to one meets. Pick someone, pick how long you want, and talk to them on video
+                    or voice. Anyone can sign up on the other side and get paid for their time.
+                </p>
+                <div class="hero-cta">
+                    <a href="dashboard.html" class="btn btn-primary btn-lg">Browse Greeties</a>
+                    <a href="auth.html#join" class="btn btn-ghost btn-lg">Get paid to be met</a>
+                </div>
+                <div class="hero-trust">
+                    <div>
+                        <div class="trust-num">10 min to 2 hrs</div>
+                        <div class="trust-label">You choose the length</div>
+                    </div>
+                    <div>
+                        <div class="trust-num">Video or voice</div>
+                        <div class="trust-label">They choose the format</div>
+                    </div>
+                    <div>
+                        <div class="trust-num">In app only</div>
+                        <div class="trust-label">No phone numbers</div>
+                    </div>
+                </div>
+            </div>
 
-    <div class="app-container">
-        <!-- LEFT: Interactive Map Area -->
-        <div class="map-view" id="mapView">
-            <canvas id="connections-canvas"></canvas>
-            <!-- Nodes will be injected here by JS -->
-            <div id="nodes-container"></div>
-
-            <!-- Map Controls (Optional) -->
-            <div class="absolute bottom-4 left-4 flex gap-4">
-                <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;" id="refreshMapBtn">
-                    Refresh Map
-                </button>
+            <div class="collage rise">
+                <div class="collage-card collage-a">
+                    <img src="https://i.pravatar.cc/600?img=5" alt="A Greetie on Greets" onerror="this.src=FALLBACK_IMG">
+                </div>
+                <div class="collage-card collage-b">
+                    <img src="https://i.pravatar.cc/600?img=11" alt="A Greetie on Greets" onerror="this.src=FALLBACK_IMG">
+                </div>
+                <div class="collage-card collage-c">
+                    <img src="https://i.pravatar.cc/600?img=1" alt="Sarah Jenkins" onerror="this.src=FALLBACK_IMG">
+                    <div>
+                        <div style="font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:.35rem;">
+                            Sarah Jenkins <span class="verified">&check;</span>
+                        </div>
+                        <div style="font-size:.78rem;color:var(--muted);">30 min video meet booked</div>
+                    </div>
+                </div>
             </div>
         </div>
+    </header>
 
-        <!-- RIGHT: Sidebar Panel -->
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2 class="text-gradient" style="font-size: 1.5rem;">Greets.com</h2>
+    <!-- ============ WHAT IT IS ============ -->
+    <section class="section" style="background:var(--bg-soft);border-block:1px solid var(--border);">
+        <div class="container">
+            <div class="sec-head center">
+                <h2>Two sides, one simple idea</h2>
+                <p>Someone wants to meet you. Someone else is happy to pay for the time. Greets handles everything in between.</p>
             </div>
-
-            <div class="sidebar-content" id="sidebarContent">
-                <!-- Content injected by JS -->
+            <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-icon">&#9733;</div>
+                    <h3>Greeties get paid</h3>
+                    <p>
+                        A Greetie is the person being met. Set your own rate, say whether you want video or voice,
+                        and pick the hours you are free. You keep control of who you accept. Musicians, athletes,
+                        actors, founders, creators and anyone else with something people want to hear can sign up.
+                    </p>
+                    <a href="auth.html#join" class="btn btn-solid btn-sm mt-6">Become a Greetie</a>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#10084;</div>
+                    <h3>Greeters book the meet</h3>
+                    <p>
+                        A Greeter is the fan doing the booking. Browse who is available, choose ten minutes for a
+                        quick hello or two hours to really get into something, and pay once. You sign up under a
+                        username, so your real name is never shown to anyone.
+                    </p>
+                    <a href="dashboard.html" class="btn btn-solid btn-sm mt-6">Find someone to meet</a>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <script src="js/main.js"></script>
+    <!-- ============ HOW IT WORKS ============ -->
+    <section class="section">
+        <div class="container">
+            <div class="sec-head">
+                <span class="eyebrow">How it works</span>
+                <h2>Four steps from browsing to talking</h2>
+            </div>
+            <div class="grid grid-4">
+                <div class="card">
+                    <div class="step-num">1</div>
+                    <h3>Find someone</h3>
+                    <p>Search by name or filter by what they do. Every Greetie shows their rate, their rating and whether they are available right now.</p>
+                </div>
+                <div class="card">
+                    <div class="step-num">2</div>
+                    <h3>Pick your time</h3>
+                    <p>Ten minutes, thirty minutes, one hour or two. The price follows the length, so you decide how much you want to spend.</p>
+                </div>
+                <div class="card">
+                    <div class="step-num">3</div>
+                    <h3>Pay once</h3>
+                    <p>One payment covers the whole meet. It is held until the meet happens, and refunded in full if the Greetie does not show up.</p>
+                </div>
+                <div class="card">
+                    <div class="step-num">4</div>
+                    <h3>Meet in the app</h3>
+                    <p>The call opens inside Greets at the agreed time, on video or voice. Nobody sees a phone number and nobody needs one.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FEATURED ============ -->
+    <section class="section" style="padding-top:0;">
+        <div class="container">
+            <div class="row justify-between wrap gap-4" style="justify-content:space-between;margin-bottom:2.2rem;">
+                <div class="sec-head" style="margin-bottom:0;">
+                    <h2>Available to meet</h2>
+                    <p>A few of the people taking bookings right now.</p>
+                </div>
+                <a href="dashboard.html" class="btn btn-ghost">See everyone</a>
+            </div>
+            <div class="grid grid-4" id="featured"></div>
+        </div>
+    </section>
+
+    <!-- ============ MAP ============ -->
+    <section class="section" style="background:var(--bg-soft);border-block:1px solid var(--border);">
+        <div class="container">
+            <div class="sec-head center">
+                <span class="eyebrow">Everywhere at once</span>
+                <h2>Greeties in every time zone</h2>
+                <p>Distance stops mattering when the meet happens in the app. Hover a face to see who it is.</p>
+            </div>
+            <div class="map-wrap" id="mapView">
+                <canvas id="connections-canvas"></canvas>
+                <div id="nodes-container"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SAFETY ============ -->
+    <section class="section">
+        <div class="container">
+            <div class="sec-head">
+                <span class="eyebrow">Ground rules</span>
+                <h2>What Greets is, and what it is not</h2>
+                <p>Greets is for conversation, advice, coaching and fan meets. It is not a dating site and there is nothing sexual on it.</p>
+            </div>
+            <div class="grid grid-3">
+                <div class="card">
+                    <div class="card-icon">&#128274;</div>
+                    <h3>Nothing sexual, ever</h3>
+                    <p>Sexual requests, sexual content and nudity are banned for everyone on both sides. One report is enough for us to look, and confirmed cases end the account.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#128241;</div>
+                    <h3>No phone numbers</h3>
+                    <p>Calls run inside Greets. No numbers, no addresses, no outside apps. Anyone pushing you to move the conversation elsewhere is breaking the rules.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#9873;</div>
+                    <h3>Report in one tap</h3>
+                    <p>There is a report control on every profile and in the footer of every page. Reports are confidential and the person you report is never told who filed it.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#128100;</div>
+                    <h3>Fans stay anonymous</h3>
+                    <p>Greeters sign up with a username. Your legal name is never shown on your profile, in search or to the Greetie you book.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#10003;</div>
+                    <h3>Greeties are verified</h3>
+                    <p>Anyone taking money uses their real name and passes identity checks first. You know exactly who you booked before the call starts.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#128179;</div>
+                    <h3>Money is held safely</h3>
+                    <p>Payment is taken at booking and released to the Greetie after the meet. No show, no charge, refunded in full.</p>
+                </div>
+            </div>
+            <div class="mt-8">
+                <a href="safety.html" class="btn btn-ghost">Read the safety rules</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ EARN ============ -->
+    <section class="section" style="padding-top:0;">
+        <div class="container">
+            <div class="band">
+                <h2>Anyone can get paid to be met</h2>
+                <p>
+                    You do not need to be famous. If people want your time, whether that is a portfolio review,
+                    a language chat or an hour of honest advice, you can set a rate and take bookings today.
+                </p>
+                <div class="row gap-3" style="justify-content:center;flex-wrap:wrap;">
+                    <a href="auth.html#join" class="btn btn-primary btn-lg">Create a Greetie account</a>
+                    <a href="about.html" class="btn btn-ghost btn-lg">How it works</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="footer"></footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/home.js"></script>
 </body>
 
 </html>

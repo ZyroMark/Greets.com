@@ -4,50 +4,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Greets.com</title>
-    <!-- Google Fonts -->
+    <title>Browse Greeties - Greets.com</title>
+    <meta name="description" content="Browse everyone taking bookings on Greets. Filter by what they do, see their rate, and book a video or voice meet.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Custom CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+    <nav id="nav"></nav>
 
-    <!-- Header -->
-    <header class="container header flex justify-between items-center">
-        <h1 class="text-gradient" style="font-size: 1.8rem;">Greets.com</h1>
-        <div class="flex gap-4 items-center">
-            <button class="nav-btn">Events</button>
-            <button class="pill-btn">My Account</button>
-            <!-- Just for easy navigation back during dev -->
-            <a href="index.html" class="nav-btn">Log Out</a>
+    <main class="container" style="padding-top:2.5rem;padding-bottom:4rem;">
+        <div class="sec-head" style="margin-bottom:2rem;">
+            <h2 id="greeting">Find someone to meet</h2>
+            <p>Every person here has set their own rate and chosen how they want to talk. Pick a length when you open their profile.</p>
         </div>
-    </header>
 
-    <main class="container">
+        <!-- Recent bookings, shown once the demo has one -->
+        <div id="bookingStrip"></div>
 
-        <!-- Filter Tabs -->
-        <nav class="tabs">
-            <button id="tab-greetie" class="tab-btn active greetie" onclick="setFilter('Greetie')">
-                Find Greeties (Celebrities)
-            </button>
-            <button id="tab-greeter" class="tab-btn" onclick="setFilter('Greeter')">
-                Find Greeters
-            </button>
-        </nav>
-
-        <!-- Dynamic Content Grid -->
-        <div id="user-grid" class="grid">
-            <!-- Cards will be injected here by JS -->
-            <div class="glass-card flex items-center justify-center p-8">
-                <p>Loading profiles...</p>
+        <div class="toolbar">
+            <div class="search">
+                <span class="muted">&#128269;</span>
+                <input type="search" id="searchInput" placeholder="Search by name, country or what they do" aria-label="Search Greeties">
             </div>
+            <a href="auth.html#join" class="btn btn-ghost btn-sm" id="earnLink">Get paid to be met</a>
         </div>
 
+        <div class="filters" id="filters"></div>
+
+        <div class="grid grid-4" id="grid"></div>
+        <div id="empty" style="display:none;text-align:center;padding:4rem 1rem;">
+            <h3 style="margin-bottom:.5rem;">Nobody matches that yet</h3>
+            <p class="muted">Try a different word, or clear the filter to see everyone.</p>
+            <button class="btn btn-ghost mt-6" id="clearAll">Clear filters</button>
+        </div>
     </main>
 
+    <footer id="footer"></footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
     <script src="js/dashboard.js"></script>
 </body>
 
