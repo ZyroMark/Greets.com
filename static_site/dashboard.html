@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Greets.com</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="container header flex justify-between items-center">
+        <h1 class="text-gradient" style="font-size: 1.8rem;">Greets.com</h1>
+        <div class="flex gap-4 items-center">
+            <button class="nav-btn">Events</button>
+            <button class="pill-btn">My Account</button>
+            <!-- Just for easy navigation back during dev -->
+            <a href="index.html" class="nav-btn">Log Out</a>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- Filter Tabs -->
+        <nav class="tabs">
+            <button id="tab-greetie" class="tab-btn active greetie" onclick="setFilter('Greetie')">
+                Find Greeties (Celebrities)
+            </button>
+            <button id="tab-greeter" class="tab-btn" onclick="setFilter('Greeter')">
+                Find Greeters
+            </button>
+        </nav>
+
+        <!-- Dynamic Content Grid -->
+        <div id="user-grid" class="grid">
+            <!-- Cards will be injected here by JS -->
+            <div class="glass-card flex items-center justify-center p-8">
+                <p>Loading profiles...</p>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>

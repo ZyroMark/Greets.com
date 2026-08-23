@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greets.com - Interactive World</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Background Elements -->
+    <div class="blob blob-purple"></div>
+    <div class="blob blob-pink"></div>
+
+    <div class="app-container">
+        <!-- LEFT: Interactive Map Area -->
+        <div class="map-view" id="mapView">
+            <canvas id="connections-canvas"></canvas>
+            <!-- Nodes will be injected here by JS -->
+            <div id="nodes-container"></div>
+
+            <!-- Map Controls (Optional) -->
+            <div class="absolute bottom-4 left-4 flex gap-4">
+                <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;" id="refreshMapBtn">
+                    Refresh Map
+                </button>
+            </div>
+        </div>
+
+        <!-- RIGHT: Sidebar Panel -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2 class="text-gradient" style="font-size: 1.5rem;">Greets.com</h2>
+            </div>
+
+            <div class="sidebar-content" id="sidebarContent">
+                <!-- Content injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
