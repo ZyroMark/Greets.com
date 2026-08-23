@@ -15,12 +15,22 @@ function debounce(fn, wait) {
     };
 }
 
-/* The map needs a laid out container before it can place anything.
-   Watching the element covers first layout and every resize after it,
-   rather than guessing when the stylesheet has landed. */
+/* The map needs a laid out container before it can place anything, and
+   the stylesheet, the webfont and the images all land at different times.
+   Rather than bet on one event, keep trying until the nodes are actually
+   on the page, then hand over to a resize watcher. */
 function watchMap() {
     var view = el("mapView");
-    if (!view) return;
+    var container = el("nodes-container");
+    if (!view || !container) return;
+
+    var tries = 0;
+
+    function attempt() {
+        renderNodes();
+        if (container.children.length) return;
+        if (++tries < 25) setTimeout(attempt, 120);
+    }
 
     var draw = debounce(renderNodes, 120);
 
@@ -30,10 +40,10 @@ function watchMap() {
         }).observe(view);
     } else {
         window.addEventListener("resize", draw);
-        window.addEventListener("load", renderNodes);
     }
 
-    renderNodes();
+    window.addEventListener("load", draw);
+    attempt();
 }
 
 /* ---------- Featured ---------- */
