@@ -7,13 +7,16 @@ var pickedMins = 30;
 var pickedCall = "video";
 
 document.addEventListener("DOMContentLoaded", function () {
+    var back = el("backLink");
+    if (back) back.innerHTML = ico("arrowLeft") + "Back to browse";
+
     var id = new URLSearchParams(location.search).get("id");
     G = findGreetie(id);
 
     if (!G) {
         el("profileRoot").innerHTML =
-            '<div class="panel center" style="padding:4rem 1.5rem;">' +
-                "<h2>We could not find that profile</h2>" +
+            '<div class="panel center" style="padding:4.5rem 1.5rem;">' +
+                '<h2 class="h2" style="font-size:1.7rem;">We could not find that profile</h2>' +
                 '<p class="muted mt-2">It may have been taken down, or the link is wrong.</p>' +
                 '<a href="dashboard.html" class="btn btn-primary mt-6">Browse everyone</a>' +
             "</div>";
@@ -25,6 +28,10 @@ document.addEventListener("DOMContentLoaded", function () {
     renderProfile();
 });
 
+function firstName() {
+    return esc(G.name.split(" ")[0]);
+}
+
 function renderProfile() {
     el("profileRoot").innerHTML =
         '<div class="p-cover"><img src="' + G.photo + '" alt="" onerror="this.style.display=\'none\'"></div>' +
@@ -32,12 +39,14 @@ function renderProfile() {
         '<div class="p-head">' +
             '<img class="p-avatar" src="' + G.photo + '" alt="' + esc(G.name) + '" onerror="this.src=FALLBACK_IMG">' +
             '<div class="p-id">' +
-                "<h1>" + esc(G.name) + ' <span class="verified" title="Identity verified">&check;</span></h1>' +
-                '<p class="muted">' + esc(G.category) + " in " + esc(G.country) + "</p>" +
+                "<h1>" + esc(G.name) + '<span class="verified" title="Identity verified">' + ico("check") + "</span></h1>" +
+                '<p class="muted row gap-2" style="display:flex;">' + ico("pin") + esc(G.category) + " in " + esc(G.country) + "</p>" +
                 '<div class="row gap-2 wrap mt-4">' +
-                    (G.live ? '<span class="chip chip-lime"><span class="dot-live"></span>Available now</span>' : '<span class="chip">Replies within a day</span>') +
-                    '<span class="chip">' + callLabel(G.call) + "</span>" +
-                    '<span class="chip">&#9733; ' + G.rating.toFixed(1) + "</span>" +
+                    (G.live
+                        ? '<span class="chip chip-grad"><span class="dot-live"></span>Available now</span>'
+                        : '<span class="chip">' + ico("clock") + "Replies within a day</span>") +
+                    '<span class="chip">' + ico(G.call === "voice" ? "mic" : "video") + callLabel(G.call) + "</span>" +
+                    '<span class="chip">' + ico("star") + G.rating.toFixed(1) + "</span>" +
                 "</div>" +
             "</div>" +
         "</div>" +
@@ -45,7 +54,7 @@ function renderProfile() {
         '<div class="p-layout">' +
             "<div>" +
                 '<div class="panel">' +
-                    "<h3>About " + esc(G.name.split(" ")[0]) + "</h3>" +
+                    "<h3>About " + firstName() + "</h3>" +
                     '<p class="muted">' + esc(G.bio) + "</p>" +
                     '<div class="stats mt-8">' +
                         '<div><div class="stat-v">' + G.meets + '</div><div class="stat-l">Meets done</div></div>' +
@@ -63,13 +72,13 @@ function renderProfile() {
 
                 '<div class="panel">' +
                     "<h3>How the meet works</h3>" +
-                    '<ul class="prose" style="margin:0 0 0 1.1rem;display:grid;gap:.5rem;">' +
-                        "<li>The call opens inside Greets at the time you agree. There is nothing to install.</li>" +
-                        "<li>No phone numbers, addresses or outside apps are shared by either side.</li>" +
-                        "<li>You are charged when you book. If " + esc(G.name.split(" ")[0]) + " does not show up, you get all of it back.</li>" +
-                        "<li>Greets is not a dating service. Anything sexual ends the meet and the account.</li>" +
+                    '<ul class="list-check">' +
+                        "<li>" + ico("check") + "<span>The call opens inside Greets at the time you agree. There is nothing to install.</span></li>" +
+                        "<li>" + ico("check") + "<span>No phone numbers, addresses or outside apps are shared by either side.</span></li>" +
+                        "<li>" + ico("check") + "<span>You are charged when you book. If " + firstName() + " does not show up, you get all of it back.</span></li>" +
+                        "<li>" + ico("check") + "<span>Greets is not a dating service. Anything sexual ends the meet and the account.</span></li>" +
                     "</ul>" +
-                    '<button class="btn btn-danger btn-sm mt-6" id="reportBtn">Report ' + esc(G.name.split(" ")[0]) + "</button>" +
+                    '<button class="btn btn-danger btn-sm mt-6" id="reportBtn">' + ico("flag") + "Report " + firstName() + "</button>" +
                 "</div>" +
             "</div>" +
 
@@ -80,23 +89,23 @@ function renderProfile() {
 }
 
 function bookingPanel() {
-    var callOpts = "";
+    var callOpts;
     if (G.call === "both") {
         callOpts =
             '<label class="label mt-6">Video or voice</label>' +
             '<div class="seg seg-2" id="callSeg">' +
                 '<label class="opt' + (pickedCall === "video" ? " sel" : "") + '" data-call="video">' +
-                    '<span class="opt-title">Video</span>' +
+                    '<span class="opt-title">' + ico("video") + "Video</span>" +
                 "</label>" +
                 '<label class="opt' + (pickedCall === "voice" ? " sel" : "") + '" data-call="voice">' +
-                    '<span class="opt-title">Voice</span>' +
+                    '<span class="opt-title">' + ico("mic") + "Voice</span>" +
                 "</label>" +
             "</div>";
     } else {
         callOpts =
             '<label class="label mt-6">Call type</label>' +
-            '<div class="notice"><span>&#10003;</span><span>' + esc(G.name.split(" ")[0]) +
-            " takes " + (G.call === "video" ? "video calls only" : "voice calls only") + ".</span></div>";
+            '<div class="notice">' + ico(G.call === "video" ? "video" : "mic") +
+            "<span>" + firstName() + " takes " + (G.call === "video" ? "video calls only" : "voice calls only") + ".</span></div>";
     }
 
     return (
@@ -116,10 +125,10 @@ function bookingPanel() {
             callOpts +
             '<div class="price-row">' +
                 '<div><div class="stat-l">Total</div><div class="muted" style="font-size:.82rem;" id="sumLine"></div></div>' +
-                '<div class="price-total" id="total"></div>' +
+                '<div class="price-total grad-text" id="total"></div>' +
             "</div>" +
-            '<button class="btn btn-primary full btn-lg mt-6" id="bookBtn">Request this meet</button>' +
-            '<p class="hint center mt-4">You are not charged until ' + esc(G.name.split(" ")[0]) + " accepts.</p>" +
+            '<button class="btn btn-primary full btn-lg mt-6" id="bookBtn">' + ico("heart") + "Request this meet</button>" +
+            '<p class="hint center mt-4">You are not charged until ' + firstName() + " accepts.</p>" +
         "</div>"
     );
 }
@@ -176,30 +185,35 @@ function confirmBooking() {
     }
 
     var price = priceFor(G, pickedMins);
-    Bookings.add({
-        id: G.id,
+    var call = activeCall() === "video" ? "video" : "voice";
+    var me = Session.get();
+
+    var booking = Bookings.add({
+        greetieId: G.id,
         name: G.name,
+        greeter: me.username,
         duration: durationLabel(pickedMins),
-        call: activeCall() === "video" ? "video" : "voice",
+        call: call,
         price: price
     });
 
     el("bookPanel").innerHTML =
         '<div class="center" style="padding:.5rem 0;">' +
-            '<div class="card-icon" style="margin:0 auto 1.2rem;">&#10003;</div>' +
-            "<h3>Request sent</h3>" +
-            '<p class="muted mt-2" style="font-size:.92rem;">' +
+            '<div class="modal-ico">' + ico("check") + "</div>" +
+            '<h3 style="font-size:1.35rem;">Request sent</h3>' +
+            '<p class="muted mt-2" style="font-size:.91rem;">' +
                 esc(G.name) + " has " + durationLabel(pickedMins).toLowerCase() +
-                " on " + (activeCall() === "video" ? "video" : "voice") + " waiting to be accepted." +
+                " on " + call + " waiting to be accepted." +
             "</p>" +
             '<div class="price-row" style="text-align:left;">' +
                 '<div><div class="stat-l">Held for this meet</div><div class="muted" style="font-size:.82rem;">Released after the call</div></div>' +
-                '<div class="price-total">$' + price + "</div>" +
+                '<div class="price-total grad-text">$' + price + "</div>" +
             "</div>" +
-            '<div class="notice mt-6" style="text-align:left;">' +
-                "<span>&#10003;</span><span>The call opens inside Greets. You will never see or need a phone number.</span>" +
+            '<div class="notice mt-6" style="text-align:left;">' + ico("phoneOff") +
+                "<span>The call opens inside Greets. You will never see or need a phone number.</span>" +
             "</div>" +
-            '<a href="dashboard.html" class="btn btn-primary full mt-6">Back to browse</a>' +
+            '<p class="hint mt-6">Reference ' + esc(booking.ref) + ". Track it on your dashboard.</p>" +
+            '<a href="dashboard.html" class="btn btn-primary full mt-4">Back to my meets</a>' +
         "</div>";
 
     window.scrollTo({ top: 0, behavior: "smooth" });

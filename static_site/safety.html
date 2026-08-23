@@ -8,7 +8,7 @@
     <meta name="description" content="The rules of conduct on Greets, what is banned, how to report someone, and what happens after a report.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -16,9 +16,9 @@
     <nav id="nav"></nav>
 
     <main class="container" style="padding-top:3rem;padding-bottom:4rem;">
-        <span class="eyebrow">Safety</span>
-        <h1 style="font-size:clamp(2rem,4.2vw,3rem);margin-bottom:1rem;">Safety and reporting</h1>
-        <p class="muted" style="max-width:720px;font-size:1.05rem;">
+        <span class="kicker">Safety</span>
+        <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.8rem);margin-bottom:1.2rem;">Safety and<br><span class="grad-text">reporting</span></h1>
+        <p class="lead" style="max-width:720px;">
             Greets only works if people feel safe using it. These are the rules, what happens when someone
             breaks them, and how to report a problem.
         </p>
@@ -28,23 +28,7 @@
             <a href="terms.html" class="btn btn-ghost">Terms and conditions</a>
         </div>
 
-        <div class="grid grid-3 mt-8" style="margin-top:3rem;">
-            <div class="card">
-                <div class="card-icon">&#128683;</div>
-                <h3>Nothing sexual</h3>
-                <p>No sexual requests, sexual content, nudity or sexual pressure, from either side, paid or not. This is the rule we enforce hardest.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">&#128241;</div>
-                <h3>Stay on Greets</h3>
-                <p>No phone numbers, addresses, socials or outside apps. Anyone pushing you to move the conversation off Greets is breaking the rules.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">&#128100;</div>
-                <h3>Be who you say you are</h3>
-                <p>Greeties use their real verified name. Impersonating a public figure to take bookings ends the account and the money goes back.</p>
-            </div>
-        </div>
+        <div class="bento mt-12" id="safetyBento"></div>
 
         <div class="prose" style="margin-top:3.5rem;">
             <h2 id="banned">What is not allowed</h2>
@@ -106,8 +90,7 @@
             </p>
         </div>
 
-        <div class="notice warn mt-8" style="margin-top:3rem;">
-            <span>&#9873;</span>
+        <div class="notice warn mt-8" style="margin-top:3rem;" id="reportNote">
             <span>
                 One report is enough for us to look. You never need to be certain, and you will not get in
                 trouble for reporting something that turns out to be a misunderstanding.
@@ -121,16 +104,10 @@
 
     <footer id="footer"></footer>
 
+    <script src="js/icons.js"></script>
     <script src="js/data.js"></script>
     <script src="js/app.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            ["openReportTop", "openReportBottom"].forEach(function (id) {
-                var b = document.getElementById(id);
-                if (b) b.addEventListener("click", function () { openReport(""); });
-            });
-        });
-    </script>
+    <script src="js/safety.js"></script>
 </body>
 
 </html>

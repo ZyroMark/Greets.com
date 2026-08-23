@@ -240,19 +240,80 @@ var Session = {
     }
 };
 
-/* Bookings made during the demo, so the dashboard can show them back. */
+/* Bookings made during the demo. Both sides read from the same list:
+   the Greeter sees what they requested, the Greetie sees what came in. */
 var Bookings = {
     key: "greets.bookings",
+
     all: function () {
         try { return JSON.parse(localStorage.getItem(this.key)) || []; }
         catch (e) { return []; }
     },
+
+    save: function (list) {
+        localStorage.setItem(this.key, JSON.stringify(list.slice(0, 40)));
+    },
+
     add: function (b) {
         var list = this.all();
+        b.ref = "GR" + Date.now().toString(36).toUpperCase().slice(-6);
+        b.status = "pending";
+        b.at = Date.now();
         list.unshift(b);
-        localStorage.setItem(this.key, JSON.stringify(list.slice(0, 20)));
+        this.save(list);
+        return b;
+    },
+
+    /* What a given fan asked for. */
+    forGreeter: function (username) {
+        return this.all().filter(function (b) { return b.greeter === username; });
+    },
+
+    /* What landed in a given Greetie's inbox. */
+    forGreetie: function (greetieId) {
+        return this.all().filter(function (b) { return b.greetieId === greetieId; });
+    },
+
+    setStatus: function (ref, status) {
+        var list = this.all();
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].ref === ref) { list[i].status = status; break; }
+        }
+        this.save(list);
     }
 };
+
+var STATUS_LABEL = {
+    pending: "Awaiting confirmation",
+    accepted: "Accepted",
+    declined: "Declined"
+};
+
+/* ---------- Greetie card ----------
+   Shared by the home page and the browse grid so they never drift apart. */
+function greetieCard(g, i) {
+    var delay = typeof i === "number" ? ' style="animation-delay:' + (i * 0.05).toFixed(2) + 's"' : "";
+    return (
+        '<article class="g-card rise" data-id="' + g.id + '"' + delay + ">" +
+            '<div class="g-media">' +
+                '<img src="' + g.photo + '" alt="' + esc(g.name) + '" loading="lazy" onerror="this.src=FALLBACK_IMG">' +
+                '<div class="g-shade"></div>' +
+                '<div class="g-badges">' +
+                    (g.live ? '<span class="g-badge live"><span class="dot-live"></span>Available now</span>' : "") +
+                    '<span class="g-badge">' + ico(g.call === "voice" ? "mic" : "video") + callLabel(g.call) + "</span>" +
+                "</div>" +
+                '<div class="g-meta">' +
+                    '<div class="g-name">' + esc(g.name) + '<span class="verified">' + ico("check") + "</span></div>" +
+                    '<div class="g-cat">' + esc(g.category) + " in " + esc(g.country) + "</div>" +
+                "</div>" +
+            "</div>" +
+            '<div class="g-foot">' +
+                '<div class="g-price">$' + priceFor(g, 10) + " <span>/ 10 min</span></div>" +
+                '<div class="g-rate">' + ico("star") + g.rating.toFixed(1) + "</div>" +
+            "</div>" +
+        "</article>"
+    );
+}
 
 /* ---------- Small DOM helpers ---------- */
 function el(id) { return document.getElementById(id); }

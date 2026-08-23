@@ -8,7 +8,7 @@
     <meta name="description" content="Sign in to Greets, or create an account as a Greeter to book meets or a Greetie to get paid for your time.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -18,20 +18,23 @@
     <div class="auth-wrap">
         <!-- LEFT: pitch -->
         <aside class="auth-aside">
-            <div class="hero-glow" style="top:-260px;left:-200px;"></div>
-            <span class="eyebrow">Greets accounts</span>
+            <svg class="blob" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                    <linearGradient id="authBlob" x1="0%" y1="10%" x2="100%" y2="90%">
+                        <stop offset="0%" stop-color="#d4ff3f" />
+                        <stop offset="100%" stop-color="#16a34a" />
+                    </linearGradient>
+                </defs>
+                <path fill="url(#authBlob)"
+                    d="M416 108c38 44 66 100 61 152-5 52-43 100-89 138-46 38-100 66-149 57-49-9-93-55-119-110-26-55-34-119-9-167 25-48 83-80 142-89 59-9 125 5 163 19z" />
+            </svg>
+
+            <span class="kicker">Greets accounts</span>
             <h2 id="asideTitle">Book time with the people you follow</h2>
             <p id="asideCopy">
                 One account lets you book meets as a fan, or take bookings and get paid for your time.
-                You can do both from the same login.
             </p>
-            <ul class="auth-points">
-                <li><span class="tick">&check;</span><span>Fans sign up with a username. Your real name is never shown.</span></li>
-                <li><span class="tick">&check;</span><span>Greeties use their real name and get verified before taking money.</span></li>
-                <li><span class="tick">&check;</span><span>Every call happens inside Greets, on video or voice.</span></li>
-                <li><span class="tick">&check;</span><span>No phone numbers are shared with anyone at any point.</span></li>
-                <li><span class="tick">&check;</span><span>Nothing sexual is allowed. Report anyone in one tap.</span></li>
-            </ul>
+            <ul class="auth-points" id="asidePoints"></ul>
         </aside>
 
         <!-- RIGHT: forms -->
@@ -44,8 +47,28 @@
 
                 <!-- ---------- SIGN IN ---------- -->
                 <form id="formSignin" novalidate>
-                    <h2 style="font-size:1.6rem;margin-bottom:.4rem;">Welcome back</h2>
-                    <p class="muted" style="font-size:.93rem;margin-bottom:1.8rem;">Sign in to book a meet or check your bookings.</p>
+                    <h2 style="font-size:1.7rem;margin-bottom:.5rem;">Welcome back</h2>
+                    <p class="muted" style="font-size:.92rem;margin-bottom:1.7rem;">Sign in to book a meet, or to accept the requests waiting for you.</p>
+
+                    <div class="field">
+                        <label class="label">Which side are you signing in on</label>
+                        <div class="seg seg-2" id="siRoleSeg">
+                            <label class="opt sel" data-role="greeter">
+                                <span class="opt-title">I book meets</span>
+                                <span class="opt-desc">Greeter, a fan</span>
+                            </label>
+                            <label class="opt" data-role="greetie">
+                                <span class="opt-title">I get booked</span>
+                                <span class="opt-desc">Greetie, paid to be met</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field" id="siGreetiePick" style="display:none;">
+                        <label class="label" for="siGreetie">Your Greetie profile</label>
+                        <select class="input" id="siGreetie"></select>
+                        <p class="hint">There is no backend yet, so pick the profile you are signing in as. This is how you reach the request inbox.</p>
+                    </div>
 
                     <div class="field">
                         <label class="label" for="siEmail">Email</label>
@@ -59,15 +82,15 @@
                     <div class="error" id="siError"></div>
                     <button class="btn btn-primary full btn-lg" type="submit">Sign in</button>
 
-                    <p class="muted center mt-6" style="font-size:.9rem;">
-                        No account yet? <a href="#join" id="goJoin" style="color:var(--lime);font-weight:600;">Create one</a>
+                    <p class="muted center mt-6" style="font-size:.89rem;">
+                        No account yet? <a href="#join" id="goJoin" style="color:var(--green-ink);font-weight:500;">Create one</a>
                     </p>
                 </form>
 
                 <!-- ---------- JOIN ---------- -->
                 <form id="formJoin" style="display:none;" novalidate>
-                    <h2 style="font-size:1.6rem;margin-bottom:.4rem;">Create your account</h2>
-                    <p class="muted" style="font-size:.93rem;margin-bottom:1.5rem;">First, tell us which side you are on. You can add the other side later.</p>
+                    <h2 style="font-size:1.7rem;margin-bottom:.5rem;">Create your account</h2>
+                    <p class="muted" style="font-size:.92rem;margin-bottom:1.5rem;">First, tell us which side you are on. You can add the other side later.</p>
 
                     <div class="field">
                         <div class="seg seg-2" id="roleSeg">
@@ -133,7 +156,7 @@
                                 <label class="opt" data-call="voice">
                                     <input type="radio" name="call" value="voice">
                                     <span class="opt-title">Voice calls only</span>
-                                    <span class="opt-desc">Audio only, camera never turns on.</span>
+                                    <span class="opt-desc">Audio only, the camera never turns on.</span>
                                 </label>
                             </div>
                         </div>
@@ -153,10 +176,7 @@
                         <input class="input" type="password" id="jPass" placeholder="At least 8 characters" autocomplete="new-password">
                     </div>
 
-                    <div class="notice mt-4" id="idNotice" style="display:none;">
-                        <span>&#10003;</span>
-                        <span>Before your first payout we check your identity against the name above. You can set up your profile straight away.</span>
-                    </div>
+                    <div class="notice mt-4" id="idNotice" style="display:none;"></div>
 
                     <div class="field mt-6">
                         <label class="check">
@@ -174,14 +194,15 @@
                     <div class="error" id="jError"></div>
                     <button class="btn btn-primary full btn-lg" type="submit">Create account</button>
 
-                    <p class="muted center mt-6" style="font-size:.9rem;">
-                        Already have an account? <a href="#" id="goSignin" style="color:var(--lime);font-weight:600;">Sign in</a>
+                    <p class="muted center mt-6" style="font-size:.89rem;">
+                        Already have an account? <a href="#" id="goSignin" style="color:var(--green-ink);font-weight:500;">Sign in</a>
                     </p>
                 </form>
             </div>
         </main>
     </div>
 
+    <script src="js/icons.js"></script>
     <script src="js/data.js"></script>
     <script src="js/app.js"></script>
     <script src="js/auth.js"></script>

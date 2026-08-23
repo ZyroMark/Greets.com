@@ -34,8 +34,8 @@ function buildNav() {
     var actions;
     if (user) {
         actions =
-            '<span class="chip chip-lime">@' + esc(user.username) + "</span>" +
-            '<button class="btn btn-ghost btn-sm" id="navSignOut">Sign out</button>';
+            '<span class="chip chip-grad">' + ico("user") + "@" + esc(user.username) + "</span>" +
+            '<button class="btn btn-ghost btn-sm" id="navSignOut">' + ico("logout") + "Sign out</button>";
     } else {
         actions =
             '<a href="auth.html" class="btn btn-ghost btn-sm">Sign in</a>' +
@@ -48,14 +48,16 @@ function buildNav() {
             '<a href="index.html" class="logo"><span class="logo-mark">G</span>Greets</a>' +
             '<div class="nav-links" id="navLinks">' + linkHtml + "</div>" +
             '<div class="nav-actions">' + actions +
-                '<button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>' +
+                '<button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">' + ico("menu") + "</button>" +
             "</div>" +
         "</div>";
 
     var toggle = el("navToggle");
     if (toggle) {
         toggle.addEventListener("click", function () {
-            el("navLinks").classList.toggle("open");
+            var open = el("navLinks").classList.toggle("open");
+            toggle.innerHTML = ico(open ? "close" : "menu");
+            toggle.setAttribute("aria-expanded", open ? "true" : "false");
         });
     }
 
@@ -129,8 +131,11 @@ function buildReportModal() {
         '<div class="modal-bg" data-close="1"></div>' +
         '<div class="modal-box">' +
             '<div id="reportForm">' +
-                "<h3>Report a problem</h3>" +
-                '<p class="muted" style="font-size:.9rem;margin-bottom:1.3rem;">Reports go to the Greets safety team. We review every one, and we never tell the other person who reported them.</p>' +
+                '<div class="row between gap-4" style="align-items:flex-start;margin-bottom:.4rem;">' +
+                    "<h3>Report a problem</h3>" +
+                    '<button class="btn btn-ghost btn-sm" data-close="1" aria-label="Close" style="padding:.4rem;">' + ico("close") + "</button>" +
+                "</div>" +
+                '<p class="muted" style="font-size:.89rem;margin-bottom:1.4rem;">Reports go to the Greets safety team. We review every one, and we never tell the other person who reported them.</p>' +
                 '<div class="field">' +
                     '<label class="label" for="reportWho">Who are you reporting</label>' +
                     '<input class="input" id="reportWho" placeholder="Name or username">' +
@@ -152,23 +157,30 @@ function buildReportModal() {
                     '<label class="label" for="reportMore">Anything you want to add</label>' +
                     '<textarea class="input" id="reportMore" rows="3" placeholder="Optional"></textarea>' +
                 "</div>" +
-                '<div class="notice warn mt-4">Anything sexual, abusive or threatening gets an account removed. Serious cases are passed to the authorities.</div>' +
+                '<div class="notice warn mt-4">' + ico("shield") +
+                    "<span>Anything sexual, abusive or threatening gets an account removed. Serious cases are passed to the authorities.</span>" +
+                "</div>" +
                 '<div class="row gap-3 mt-6">' +
-                    '<button class="btn btn-primary full" id="reportSend">Send report</button>' +
+                    '<button class="btn btn-primary full" id="reportSend">' + ico("flag") + "Send report</button>" +
                     '<button class="btn btn-ghost" data-close="1">Cancel</button>' +
                 "</div>" +
             "</div>" +
             '<div id="reportDone" style="display:none;text-align:center;padding:1rem 0;">' +
-                '<div class="card-icon" style="margin:0 auto 1.2rem;">OK</div>' +
+                '<div class="modal-ico">' + ico("check") + "</div>" +
                 "<h3>Report received</h3>" +
-                '<p class="muted mt-2" style="font-size:.92rem;">The safety team will look at this. If you are in immediate danger, contact your local emergency services.</p>' +
+                '<p class="muted mt-2" style="font-size:.91rem;">The safety team will look at this. If you are in immediate danger, contact your local emergency services.</p>' +
                 '<button class="btn btn-primary mt-6" data-close="1">Close</button>' +
             "</div>" +
         "</div>";
     document.body.appendChild(box);
 
     box.addEventListener("click", function (e) {
-        if (e.target.getAttribute("data-close")) closeReport();
+        var hit = e.target.closest ? e.target.closest("[data-close]") : null;
+        if (hit) closeReport();
+    });
+
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closeReport();
     });
 
     el("reportSend").addEventListener("click", function () {

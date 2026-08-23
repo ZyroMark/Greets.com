@@ -27,19 +27,24 @@ Everyone accepts the terms and conditions and the privacy policy when they creat
 - `index.html` is the home page. It explains both sides, walks through the four steps of a booking, shows featured Greeties, and carries an interactive map of who is available.
 - `about.html` covers what Greets is, who it is for, how pricing works, why one side is anonymous and the other is not, and a plain statement that this is not a dating site.
 - `auth.html` is the combined sign in and sign up page. Signing up asks which side you are on and shows different fields for each.
-- `dashboard.html` is the browse view, with search, category filters and the card grid.
+- `dashboard.html` is the browse view, with search, category filters and the card grid. It also carries both inboxes: what a Greeter has requested, and the requests a Greetie needs to accept or decline.
 - `profile.html` is a single Greetie with the booking panel, where you choose a length and a call type and see the price update.
 - `safety.html` lists what is banned, how to report someone and what happens afterwards.
 - `terms.html` and `privacy.html` are the two agreements users accept at sign up.
+
+## Design
+
+White and light green surfaces with lime and vibrant green as the only accent colours. Type is Poppins, Light for body copy and Medium for headings. Icons are a stroke icon set drawn on a 24 grid and injected once as an SVG sprite, so there are no emoji anywhere in the interface.
 
 ## Code layout
 
 Everything lives in `static_site/`:
 
-- `css/style.css` holds the whole design system. Dark surfaces, a lime accent, rounded cards and pill shaped controls, with breakpoints at 1000px, 780px and 520px.
-- `js/data.js` holds the Greetie profiles, the meet lengths, the pricing function and the demo session helpers. Every page loads it first.
+- `css/style.css` holds the whole design system, with breakpoints at 1040px, 800px and 540px.
+- `js/icons.js` defines the icon set and injects the sprite. Every page loads it first.
+- `js/data.js` holds the Greetie profiles, the meet lengths, the pricing function, the shared card renderer and the demo session and booking helpers.
 - `js/app.js` builds the navigation and footer on every page and provides the report dialog.
-- `js/home.js`, `js/auth.js`, `js/dashboard.js` and `js/profile.js` are the per page scripts.
+- `js/home.js`, `js/about.js`, `js/auth.js`, `js/dashboard.js`, `js/profile.js` and `js/safety.js` are the per page scripts.
 
 ## Running it locally
 
@@ -53,7 +58,9 @@ Opening `static_site/index.html` straight from the file system also works, thoug
 
 ## Current state
 
-This is a working front end with no backend behind it yet. Profiles are defined in `js/data.js`. Sign in accepts any valid looking email and password, and the session is kept in browser storage so the routes and the booking flow run end to end. Bookings are recorded in the same place and shown back on the dashboard.
+This is a working front end with no backend behind it yet. Profiles are defined in `js/data.js`. Sign in accepts any valid looking email and password, and the session is kept in browser storage so the routes and the flows run end to end.
+
+Because there is no server, the sign in form asks which side you are on. Choosing Greetie lets you pick which profile you are signing in as, which is how you reach the request inbox and accept or decline a booking. Both sides read the same booking list, so a request made as a fan appears for the Greetie, and the status the Greetie sets shows back on the fan dashboard.
 
 No payment is taken, no call is placed, no report is delivered and no identity is verified. Those parts need a server.
 

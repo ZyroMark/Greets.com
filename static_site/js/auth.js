@@ -1,25 +1,53 @@
 /* ============================================================
    Sign in and join.
-   Both paths end at the dashboard, which is the bug that was
-   in the old build: signing in only swapped a sidebar panel.
+   Both paths end on the dashboard. Signing in as a Greetie lands
+   you on the request inbox, so a booking can actually be accepted.
    ============================================================ */
 
+var siRole = "greeter";
+
 document.addEventListener("DOMContentLoaded", function () {
-    /* Already signed in, no reason to sit on this page. */
     if (Session.isIn()) {
         location.replace("dashboard.html");
         return;
     }
 
+    renderAsidePoints();
+    fillGreetieSelect();
     wireTabs();
+    wireSigninRole();
     wireRolePicker();
     wireCallPicker();
     wireRateHint();
     wireSignin();
     wireJoin();
 
+    el("idNotice").innerHTML = ico("idCard") +
+        "<span>Before your first payout we check your identity against the name above. You can set up your profile straight away.</span>";
+
     if (location.hash === "#join") showTab("join");
 });
+
+function renderAsidePoints() {
+    var points = [
+        "Fans sign up with a username. Your real name is never shown.",
+        "Greeties use their real name and get verified before taking money.",
+        "Every call happens inside Greets, on video or voice.",
+        "No phone numbers are shared with anyone at any point.",
+        "Nothing sexual is allowed. Report anyone in one tap."
+    ];
+    el("asidePoints").innerHTML = points.map(function (p) {
+        return '<li><span class="tick">' + ico("check") + "</span><span>" + p + "</span></li>";
+    }).join("");
+}
+
+function fillGreetieSelect() {
+    var sel = el("siGreetie");
+    if (!sel) return;
+    sel.innerHTML = GREETIES.map(function (g) {
+        return '<option value="' + g.id + '">' + esc(g.name) + " (" + esc(g.category) + ")</option>";
+    }).join("");
+}
 
 /* ---------- Tabs ---------- */
 function showTab(which) {
@@ -33,7 +61,7 @@ function showTab(which) {
         : "Book time with the people you follow";
     el("asideCopy").textContent = join
         ? "Pick the side you are on now. Fans stay anonymous behind a username, and anyone taking money signs up under their real name."
-        : "One account lets you book meets as a fan, or take bookings and get paid for your time. You can do both from the same login.";
+        : "One account lets you book meets as a fan, or take bookings and get paid for your time.";
 }
 
 function wireTabs() {
@@ -43,7 +71,7 @@ function wireTabs() {
     el("goSignin").addEventListener("click", function (e) { e.preventDefault(); showTab("signin"); });
 }
 
-/* ---------- Role and call pickers ---------- */
+/* ---------- Segment helper ---------- */
 function pickOne(segId, attr, onPick) {
     var seg = el(segId);
     if (!seg) return;
@@ -53,9 +81,17 @@ function pickOne(segId, attr, onPick) {
                 o.classList.remove("sel");
             });
             opt.classList.add("sel");
-            opt.querySelector("input").checked = true;
+            var input = opt.querySelector("input");
+            if (input) input.checked = true;
             if (onPick) onPick(opt.getAttribute(attr));
         });
+    });
+}
+
+function wireSigninRole() {
+    pickOne("siRoleSeg", "data-role", function (role) {
+        siRole = role;
+        el("siGreetiePick").style.display = role === "greetie" ? "block" : "none";
     });
 }
 
@@ -82,8 +118,7 @@ function wireRateHint() {
             return;
         }
         /* Mirrors priceFor: 1 hour is 6 units with a 10 percent discount. */
-        var hour = Math.round(v * 6 * 0.9);
-        el("rateHint").textContent = "A 1 hour meet would cost a Greeter about $" + hour + ".";
+        el("rateHint").textContent = "A 1 hour meet would cost a Greeter about $" + Math.round(v * 6 * 0.9) + ".";
     });
 }
 
@@ -99,12 +134,27 @@ function wireSignin() {
         if (pass.length < 1) { err.textContent = "Enter your password."; return; }
         err.textContent = "";
 
-        /* Demo sign in. Any valid looking details work until there is a backend. */
-        Session.set({
-            role: "greeter",
-            username: email.split("@")[0].replace(/[^a-z0-9_]/gi, "").toLowerCase() || "greeter",
-            email: email
-        });
+        if (siRole === "greetie") {
+            var g = findGreetie(el("siGreetie").value);
+            if (!g) { err.textContent = "Pick which Greetie profile you are signing in as."; return; }
+            Session.set({
+                role: "greetie",
+                greetieId: g.id,
+                name: g.name,
+                username: g.name.toLowerCase().replace(/[^a-z0-9]+/g, "_"),
+                email: email,
+                category: g.category,
+                call: g.call,
+                rate: g.rate
+            });
+        } else {
+            Session.set({
+                role: "greeter",
+                username: email.split("@")[0].replace(/[^a-z0-9_]/gi, "").toLowerCase() || "greeter",
+                email: email
+            });
+        }
+
         goNext();
     });
 }
@@ -143,6 +193,7 @@ function wireJoin() {
             var name = el("jRealName").value.trim();
             user = {
                 role: "greetie",
+                greetieId: null,
                 name: name,
                 username: name.toLowerCase().replace(/[^a-z0-9]+/g, "_"),
                 email: email,
