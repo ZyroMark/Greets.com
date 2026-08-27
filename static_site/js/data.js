@@ -209,6 +209,12 @@ function priceFor(greetie, mins) {
     return Math.round(greetie.rate * d.units * d.mult);
 }
 
+/* "30 minutes" and "1 hour" back into a number the meet clock can count down. */
+function minutesOf(label) {
+    var d = DURATIONS.filter(function (x) { return x.label === label; })[0];
+    return d ? d.mins : 10;
+}
+
 function findGreetie(id) {
     id = parseInt(id, 10);
     return GREETIES.filter(function (g) { return g.id === id; })[0] || null;
@@ -272,6 +278,11 @@ var Bookings = {
     /* What landed in a given Greetie's inbox. */
     forGreetie: function (greetieId) {
         return this.all().filter(function (b) { return b.greetieId === greetieId; });
+    },
+
+    /* One booking by its GRxxxxxx reference. The meet room joins on this. */
+    byRef: function (ref) {
+        return this.all().filter(function (b) { return b.ref === ref; })[0] || null;
     },
 
     setStatus: function (ref, status) {

@@ -112,9 +112,17 @@ function settledRow(b) {
     return (
         '<div class="row between wrap gap-3" style="padding:.7rem 0;border-top:1px solid var(--line);">' +
             '<div class="muted" style="font-size:.88rem;">@' + esc(b.greeter) + ", " + esc(b.duration) + "</div>" +
-            statusChip(b.status) +
+            '<div class="row gap-3 wrap">' + joinBtn(b) + statusChip(b.status) + "</div>" +
         "</div>"
     );
+}
+
+/* An accepted booking has to lead somewhere, so both sides get the
+   same way into the meet room. */
+function joinBtn(b) {
+    if (b.status !== "accepted") return "";
+    return '<a class="btn btn-primary btn-sm" href="meet.html?ref=' + encodeURIComponent(b.ref) + '">' +
+        ico(b.call === "voice" ? "mic" : "video") + "Join meet</a>";
 }
 
 /* The Greeter side: what they asked for and where it stands. */
@@ -137,6 +145,7 @@ function renderGreeterInbox(user, host) {
                         '<div class="row gap-3 wrap">' +
                             '<span class="chip chip-grad">$' + b.price + "</span>" +
                             statusChip(b.status) +
+                            joinBtn(b) +
                         "</div>" +
                     "</div>"
                 );

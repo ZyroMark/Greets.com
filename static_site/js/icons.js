@@ -34,6 +34,9 @@ var ICONS = {
     pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
     eyeOff: '<path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.5 13.5 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><path d="m2 2 20 20"/>',
     idCard: '<rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M6 16c0-1.5 1.3-2.5 3-2.5s3 1 3 2.5"/><path d="M15 10h4"/><path d="M15 14h4"/>',
+    micOff: '<path d="M9 9v-4a3 3 0 0 1 5.12-2.12"/><path d="M15 9.34v-2.34"/><path d="M19 10v2a7 7 0 0 1-.6 2.8"/><path d="M16.5 16.5a7 7 0 0 1-11.5-4.5v-2"/><path d="M12 19v3"/><path d="m2 2 20 20"/>',
+    videoOff: '<path d="M16 16v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2"/><path d="M10 6h4a2 2 0 0 1 2 2v3l6-4v10"/><path d="m2 2 20 20"/>',
+    refresh: '<path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/>',
     calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>'
 };
 
